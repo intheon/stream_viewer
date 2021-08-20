@@ -1,0 +1,12 @@
+site_name: Stream Viewer
+repo_url: https://github.com/intheon/StreamViewer/
+theme:
+  name: "material"
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+plugins:
+  - search
+  - mkdocstrings
