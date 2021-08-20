@@ -119,20 +119,21 @@ class VisbrainRenderer(RendererBaseDisplay):
             self._cbar = ColorbarObj(self._obj, **cbar_state)
             self.sc.add_to_subplot(self._cbar, row=0, col=1, width_max=200)
 
-    @property
+    @RendererBaseDisplay.bg_color.getter
     def bg_color(self):
         return self.sc.canvas.bgcolor
 
-    # @RendererBufferData.bg_color.setter
-    # def bg_color(self, value):
-    #     """
-    #     Args:
-    #         value:
-    #         If str, can be any of the names in ``vispy.color.get_color_names``.
-    #         Can also be a hex value if it starts with ``'#'`` as ``'#ff0000'``.
-    #         If array-like, it must be an 1-dimensional array with 3 or 4 elements.
-    #     """
-    #     self.sc.canvas.bgcolor = value
+    @RendererBaseDisplay.bg_color.setter
+    def bg_color(self, value):
+        """
+        Args:
+            value:
+            If str, can be any of the names in ``vispy.color.get_color_names``.
+            Can also be a hex value if it starts with ``'#'`` as ``'#ff0000'``.
+            If array-like, it must be an 1-dimensional array with 3 or 4 elements.
+        """
+        self._bg_color = value
+        self.sc.canvas.bgcolor = value
 
     @property
     def show_colorbar(self) -> bool:
