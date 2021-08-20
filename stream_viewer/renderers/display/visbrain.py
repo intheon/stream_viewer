@@ -15,7 +15,7 @@ class VisbrainRenderer(RendererBaseDisplay):
     bg_colors = vispy.color.get_color_names()
     gui_kwargs = dict(RendererBaseDisplay.gui_kwargs,
                       over_clip_color=str, under_clip_color=str,
-                      mask_out_of_range=bool, show_colorbar=bool, rotate=str)
+                      show_colorbar=bool, rotate=str)
 
     def __init__(self,
                  color_set: str = 'viridis',
@@ -157,3 +157,11 @@ class VisbrainRenderer(RendererBaseDisplay):
     def rotate(self, value: float):
         self._rotate = value
         self.reset_renderer()
+
+    @property
+    def over_clip_color(self):
+        return self._over_color
+
+    @property
+    def under_clip_color(self):
+        return self._under_color
