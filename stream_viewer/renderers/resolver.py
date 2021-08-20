@@ -44,3 +44,21 @@ def list_renderers(extra_search_dirs=[], interface_classes=[RendererFormatData, 
                 if all([issubclass(obj, _) for _ in interface_classes]):
                     found_renderers.add(name)
     return list(found_renderers)
+
+
+def get_kwargs_from_settings(settings, rend_cls):
+    rend_kwargs = {}
+    for rend_key in settings.allKeys():
+        if rend_key.startswith('data_sources') or rend_key.lower().startswith('renderer'):
+            continue
+        if rend_key in rend_cls.gui_kwargs:
+            val = settings.value(rend_key, type=rend_cls.gui_kwargs[rend_key])
+        else:
+            val = settings.value(rend_key)
+            if val == 'true':
+                val = True
+            elif val == 'false':
+                val = False
+            # TODO: Further coerce strings to appropriate types.
+        rend_kwargs[rend_key] = val
+    return rend_kwargs

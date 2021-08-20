@@ -7,7 +7,9 @@ import pathlib
 def full_search_paths(sv_modulename, extra_search_dirs=[]):
     search_paths = []
     for search_dir in extra_search_dirs:
-        search_paths.append(pathlib.Path(search_dir))
+        search_path = pathlib.Path(os.path.expandvars(search_dir))
+        if search_path.exists() and search_path.is_dir():
+            search_paths.append(search_path)
     search_paths.append(pathlib.Path(os.path.expanduser('~')) / '.stream_viewer' / 'plugins' / sv_modulename)
     search_paths[-1].mkdir(parents=True, exist_ok=True)
     search_paths.append(pathlib.Path(__file__).parents[1].absolute() / sv_modulename)

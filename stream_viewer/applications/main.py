@@ -12,16 +12,16 @@ from stream_viewer.data import LSLStreamInfoTableModel
 from stream_viewer.widgets import load_widget
 from stream_viewer.widgets import ConfigAndRenderWidget
 from stream_viewer.widgets import StreamStatusQMLWidget
-from stream_viewer.renderers import load_renderer, list_renderers
+from stream_viewer.renderers import load_renderer, list_renderers, get_kwargs_from_settings
 
 
 class LSLViewer(QtWidgets.QMainWindow):
     RENDERER = 'LineVis'
 
-    def __init__(self, file: str = None):
+    def __init__(self, settings_path: str = None):
         """
         This can be run at the terminal either with `python -m stream_viewer.applications.main` or the executable
-        `lsl_viewer`. The application settings are stored in ~/.stream_viewer/lsl_viewer.ini
+        `lsl_viewer`.
 
         Additional command-line arguments are available. See `lsl_viewer --help`.
 
@@ -34,7 +34,8 @@ class LSLViewer(QtWidgets.QMainWindow):
 
         Double-clicking on a stream will launch a modal window with a dropdown box giving a list of identified
         renderers. This includes renderers that come with the stream_viewer package as well as any renderers that
-        appear in the ~/.stream_viewer/plugins/renderers folder.
+        appear in plugins folders. Searched plugins folders include ~/.stream_viewer/plugins/renderers ,
+        and any folders that are specified in the settings file.
 
         Choosing a renderer and clicking OK will spawn a new renderer dock. The renderer will be initialized with
         settings in the ini file.
@@ -47,22 +48,27 @@ class LSLViewer(QtWidgets.QMainWindow):
         renderer. Most of these options can be updated thereafter using the widgets in the control panel.
 
         Args:
-            file:
+            settings_path: path to the ini file storing application settings. If not provided then the default
+                ~/.stream_viewer/lsl_viewer.ini is used.
         """
         super().__init__()
 
         self._open_renderers = []  # List of renderer keys (rend_cls :: strm_name :: int)
+        self._plugin_dirs = {'renderers': [], 'widgets': []}  # Dict of lists of directories to search for plugins
+                                                              #  in addition to default search dir of
+                                                              #  ~/.stream_viewer/plugins/{renderers|widgets}
         self._monitor_sources = {}
 
         self.setWindowTitle("Stream Viewer")
         home_dir = Path(QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.HomeLocation))
         self._settings_path = home_dir / '.stream_viewer' / 'lsl_viewer.ini'
-        if file is not None:
-            _settings_path = Path(file)
-            if not _settings_path.exists():
-                _settings_path = home_dir / '.stream_viewer' / _settings_path.name
-            if _settings_path.exists():
-                self._settings_path = _settings_path
+        if settings_path is not None:
+            settings_path = Path(settings_path)
+            if not settings_path.exists():
+                # Try only the filename in the default folder.
+                settings_path = home_dir / '.stream_viewer' / settings_path.name
+            if settings_path.exists():
+                self._settings_path = settings_path
 
         # Set the data model for the stream status view. This handles its own list of streams.
         self.stream_status_model = LSLStreamInfoTableModel(refresh_interval=5.0)
@@ -116,6 +122,18 @@ class LSLViewer(QtWidgets.QMainWindow):
             self.showMaximized()
         settings.endGroup()
 
+        # Load extra PluginFolders to search for plugins
+        settings.beginGroup("PluginFolders")
+        for plugin_group in settings.childGroups():
+            settings.beginGroup(plugin_group)
+            if plugin_group not in self._plugin_dirs:
+                self._plugin_dirs[plugin_group] = []
+            for str_ix in settings.childKeys():
+                self._plugin_dirs[plugin_group].append(settings.value(str_ix))
+            settings.endGroup()  # renderers, widgets, etc
+        settings.endGroup()  # PluginFolders
+
+        # Configure the StreamStatus Panel
         settings.beginGroup("StreamStatus")
         if settings.value("floating", 'false') == 'true':
             status_dock = self.findChild(QtWidgets.QDockWidget, name="StatusPanel")
@@ -124,6 +142,7 @@ class LSLViewer(QtWidgets.QMainWindow):
             status_dock.move(settings.value("pos"))
         settings.endGroup()
 
+        # Initialize pre-configured renderers (i.e., re-open those that were open during last close).
         settings.beginGroup("RendererDocksMain")
         dock_groups = settings.childGroups()
         settings.endGroup()
@@ -141,21 +160,8 @@ class LSLViewer(QtWidgets.QMainWindow):
                 settings.endGroup()
             settings.endGroup()
             rend_name = dock_name.split("|")[0]
-            rend_cls = load_renderer(rend_name)
-            rend_kwargs = {}
-            for rend_key in settings.allKeys():
-                if rend_key.startswith('data_sources') or rend_key.lower().startswith('renderer'):
-                    continue
-                if rend_key in rend_cls.gui_kwargs:
-                    val = settings.value(rend_key, type=rend_cls.gui_kwargs[rend_key])
-                else:
-                    val = settings.value(rend_key)
-                    if val == 'true':
-                        val = True
-                    elif val == 'false':
-                        val = False
-                    # TODO: Further coerce strings to appropriate types.
-                rend_kwargs[rend_key] = val
+            rend_cls = load_renderer(rend_name, extra_search_dirs=self._plugin_dirs['renderers'])
+            rend_kwargs = get_kwargs_from_settings(settings, rend_cls)
             settings.endGroup()
             self.on_stream_activated(data_sources, renderer_name=rend_name, renderer_kwargs=rend_kwargs)
 
@@ -174,6 +180,15 @@ class LSLViewer(QtWidgets.QMainWindow):
             settings.setValue("size", self.size())
             settings.setValue("pos", self.pos())
         settings.endGroup()
+
+        # Save list of search directories
+        settings.beginGroup("PluginFolders")
+        for k, v in self._plugin_dirs.items():
+            settings.beginGroup(k)
+            for ix, _dir in enumerate(v):
+                settings.setValue(str(ix), _dir)
+            settings.endGroup()  # plugin group: renderers, widgets, etc.
+        settings.endGroup()  # PluginFolders
 
         # Save StatusPanel geometry.
         status_dock = self.findChild(QtWidgets.QDockWidget, name="StatusPanel")
@@ -226,7 +241,8 @@ class LSLViewer(QtWidgets.QMainWindow):
         # Normalize renderer_name: if not provided then use a popup combo box.
         if renderer_name is None:
             item, ok = QtWidgets.QInputDialog.getItem(self, "Select Renderer", "Found Renderers",
-                                                      list_renderers() + self._open_renderers)
+                                                      list_renderers(extra_search_dirs=self._plugin_dirs['renderers'])
+                                                      + self._open_renderers)
             renderer_name = item if ok else None
 
         if renderer_name is None:
@@ -270,7 +286,7 @@ class LSLViewer(QtWidgets.QMainWindow):
 
         # New renderer
         renderer_kwargs['key'] = rend_key
-        renderer_cls = load_renderer(renderer_name)
+        renderer_cls = load_renderer(renderer_name, extra_search_dirs=self._plugin_dirs['renderers'])
         renderer = renderer_cls(**renderer_kwargs)
         for src in sources:
             renderer.add_source(src)
@@ -278,7 +294,7 @@ class LSLViewer(QtWidgets.QMainWindow):
         # New control panel
         if hasattr(renderer, 'COMPAT_ICONTROL') and len(renderer.COMPAT_ICONTROL) > 0:
             # Infer the control panel class from a string
-            control_panel_cls = load_widget(renderer.COMPAT_ICONTROL[0])
+            control_panel_cls = load_widget(renderer.COMPAT_ICONTROL[0], extra_search_dirs=self._plugin_dirs['widgets'])
             ctrl_panel = control_panel_cls(renderer)
         else:
             ctrl_panel = None
@@ -331,7 +347,7 @@ class LSLViewer(QtWidgets.QMainWindow):
 def main():
     parser = argparse.ArgumentParser(prog="lsl_viewer",
                                      description="Interactive application for visualizing LSL streams.")
-    parser.add_argument('-f', '--file', nargs='?', help="Path to config file.")
+    parser.add_argument('-s', '--settings_path', nargs='?', help="Path to config file.")
     args = parser.parse_args()
 
     QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)

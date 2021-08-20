@@ -151,7 +151,7 @@ class RendererFormatData(QtCore.QObject):
     def frozen(self):
         return self._frozen
 
-    def save_settings(self, settings='viewer.ini'):
+    def save_settings(self, settings='orphan.ini'):
         from pathlib import Path
         if isinstance(settings, str):
             settings = Path(settings)
@@ -170,7 +170,8 @@ class RendererFormatData(QtCore.QObject):
             settings.endGroup()
         settings.endGroup()
         for attr_name in self.gui_kwargs.keys():
-            settings.setValue(attr_name, getattr(self, attr_name))
+            val = getattr(self, attr_name)
+            settings.setValue(attr_name, val)
         settings.endGroup()
         return settings
 
