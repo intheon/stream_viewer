@@ -88,6 +88,15 @@ class VispyRenderer(VispyTimerRenderer):
         return self.native
 
     @property
+    def draw_mode(self):
+        return self._draw_mode
+
+    @draw_mode.setter
+    def draw_mode(self, value):
+        self._draw_mode = value
+        self.reset_renderer()
+
+    @property
     def visuals(self):
         return self._visuals + self._chan_label_visuals + self._decorations
 

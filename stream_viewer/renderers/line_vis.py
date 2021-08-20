@@ -155,8 +155,8 @@ class LineVis(RendererDataTimeSeries, VispyRenderer):
         self._src_top_row = []
         self._src_last_marker_time = []
         self._mrk_offset = []
+        kwargs['draw_mode'] = 'line_strip'  # Create/overwrite. Must be line_strip.
         super().__init__(color_set=color_set,
-                         draw_mode='line_strip',
                          **kwargs)
         self.reset_renderer()
 
