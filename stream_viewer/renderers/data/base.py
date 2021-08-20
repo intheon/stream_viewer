@@ -7,6 +7,7 @@ from typing import Tuple, List
 import numpy as np
 import pandas as pd
 from qtpy import QtCore
+from qtpy import QtGui
 from qtpy import QtWidgets
 from stream_viewer.buffers import StreamDataBuffer, MergeLastOnlyBuffer, TimeSeriesBuffer
 from stream_viewer.data.data_source import IDataSource
@@ -153,6 +154,7 @@ class RendererFormatData(QtCore.QObject):
 
     def save_settings(self, settings='orphan.ini'):
         from pathlib import Path
+        import vispy.color.color_array
         if isinstance(settings, str):
             settings = Path(settings)
         if isinstance(settings, Path):
@@ -171,6 +173,8 @@ class RendererFormatData(QtCore.QObject):
         settings.endGroup()
         for attr_name in self.gui_kwargs.keys():
             val = getattr(self, attr_name)
+            if isinstance(val, vispy.color.color_array.Color):
+                val = str(val.hex)
             settings.setValue(attr_name, val)
         settings.endGroup()
         return settings

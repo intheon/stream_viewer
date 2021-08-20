@@ -51,14 +51,26 @@ def get_kwargs_from_settings(settings, rend_cls):
     for rend_key in settings.allKeys():
         if rend_key.startswith('data_sources') or rend_key.lower().startswith('renderer'):
             continue
-        if rend_key in rend_cls.gui_kwargs:
-            val = settings.value(rend_key, type=rend_cls.gui_kwargs[rend_key])
-        else:
-            val = settings.value(rend_key)
+        # First check to see if it is @Invalid(), which is None
+        val = settings.value(rend_key)
+        if val is not None:
+            if rend_key in rend_cls.gui_kwargs:
+                val = settings.value(rend_key, type=rend_cls.gui_kwargs[rend_key])
+            else:
+                try:
+                    val = settings.value(rend_key, type=float)
+                except TypeError:
+                    try:
+                        val = settings.value(rend_key, type=int)
+                    except TypeError:
+                        # TODO: Further coerce strings to appropriate types.
+                        val = settings.value(rend_key)  # Just load it as a string
             if val == 'true':
                 val = True
             elif val == 'false':
                 val = False
-            # TODO: Further coerce strings to appropriate types.
+            elif val == 'None':
+                val = None
         rend_kwargs[rend_key] = val
+
     return rend_kwargs
