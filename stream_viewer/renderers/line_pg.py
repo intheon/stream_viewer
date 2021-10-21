@@ -32,6 +32,7 @@ class LinePG(RendererDataTimeSeries, PGRenderer):
                  antialias: bool = True,
                  ylabel_as_title: bool = False,
                  ylabel_width: int = None,
+                 ylabel: str = None,
                  **kwargs):
         """
         Multi-channel timeseries visualization using pyqtgraph widgets. Channels originating from the same data source
@@ -49,6 +50,7 @@ class LinePG(RendererDataTimeSeries, PGRenderer):
             ylabel_width: Force a minimum amount of real-estate to be allocated to the ylabel. This overcomes a problem
                 with the required y-width not being calculated until after all the labels and ticks have been
                 created.
+            ylabel: The ylabel for the plot. If unspecified, the name of the LSL stream is automatically used.
             **kwargs:
         """
         self._offset_channels = offset_channels
@@ -57,6 +59,7 @@ class LinePG(RendererDataTimeSeries, PGRenderer):
         self._antialias = antialias
         self._ylabel_as_title = ylabel_as_title
         self._ylabel_width = ylabel_width
+        self._ylabel = ylabel
         self._requested_auto_scale = auto_scale.lower()  # Actual auto-scale is different depending on n streams.
         self._widget = pg.GraphicsLayoutWidget()
         self._do_yaxis_sync = False
@@ -126,12 +129,12 @@ class LinePG(RendererDataTimeSeries, PGRenderer):
             pw.getAxis("bottom").setStyle(showValues=self.ylabel_as_title)
             yax = pw.getAxis('left')
             yax.setTickFont(font)
-            ylabel = json.loads(src.identifier)['name']
+            stream_ylabel = json.loads(src.identifier)['name']
             if 'unit' in ch_states and ch_states['unit'].nunique() == 1:
                 # I don't use the `units=` kwarg here because it prepends a magnitude prefix (u, m, k, M),
                 # which we don't always want.
-                ylabel = ylabel + ' (%s)' % ch_states['unit'].iloc[0]
-            pw.setLabel('top' if self.ylabel_as_title else 'left', ylabel, **labelStyle)
+                stream_ylabel = stream_ylabel + ' (%s)' % ch_states['unit'].iloc[0]
+            pw.setLabel('top' if self.ylabel_as_title else 'left', self._ylabel or stream_ylabel, **labelStyle)
             if self.ylabel_as_title:
                 pw.getAxis("top").setStyle(showValues=False)
 
