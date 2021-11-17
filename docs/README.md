@@ -19,10 +19,19 @@ Requirements:
 - numpy
 - PyOpenGL
 - qtpy
-- PyQt5 or PySide2
-- vispy (use pip; conda version outdated)
+- PySide2
+- vispy
 - visbrain
 - pylsl
+- pyqtgraph
+
+To install these with pip, run:
+
+`pip install -r requirements`
+
+Or, if using miniconda, create an environment with:
+
+`conda env install -f conda-requirements.yml`
 
 ### Running the provided applications
 

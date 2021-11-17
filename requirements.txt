@@ -1,0 +1,9 @@
+pandas
+numpy
+PyOpenGL
+qtpy
+PySide2
+vispy
+visbrain
+pylsl
+pyqtgraph
