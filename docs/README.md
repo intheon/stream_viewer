@@ -48,3 +48,7 @@ Additionally, several of the more useful applications have entry points and can 
 ## Documentation
 
 Start at the [outline/overview](outline/overview.md).
+
+## Acknowledgments 
+
+StreamViewer is developed by [Intheon](https://intheon.io) and was funded in part by the Army Research Laboratory under Cooperative Agreement Number W911NF-10-2-0022 as part of the [Lab Streaming Layer project](https://github.com/sccn/labstreaminglayer/). 
