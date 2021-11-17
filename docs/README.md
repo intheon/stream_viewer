@@ -1,7 +1,5 @@
 # Introduction
 
-The full documentation can be found online: [https://intheon.github.io/StreamViewer](https://intheon.github.io/StreamViewer).
-
 StreamViewer is a Python package for real-time data visualization. It comprises data-source and visualization modules, as well as some useful widgets to connect and configure those modules. It is intended for integration into applications for real-time monitoring and visualization of streaming data, especially data from [lab streaming layer (LSL)](https://labstreaminglayer.readthedocs.io/index.html) streams.
 
 Additionally, StreamViewer comes with several pre-made applications, including a well-featured GUI for monitoring LSL streams and visualizing data. After installing the stream_viewer python package with `pip install stream_viewer`, this visualization application can be launched from console with `lsl_viewer`.
