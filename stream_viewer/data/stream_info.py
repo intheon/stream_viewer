@@ -96,7 +96,7 @@ class LSLInfoItemModel:
 
         if len(new_df) > 0:
             self.beginInsertRows(QtCore.QModelIndex(), len(self._data), len(self._data) + len(new_df) - 1)
-            self._data = self._data.append(new_df.drop(columns=['_merge']), ignore_index=True)
+            self._data = pd.concat((self._data, new_df.drop(columns=['_merge'])), ignore_index=True)
             self.endInsertRows()
 
     @QtCore.Slot(float)
