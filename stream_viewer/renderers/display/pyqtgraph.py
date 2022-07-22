@@ -59,7 +59,7 @@ class PGRenderer(RendererBaseDisplay):
             colors = pg.ColorMap(np.arange(n_items) / max(n_items - 1, 1), (255 * colors).astype(int))
         elif color_set in Gradients:
             colors = pg.ColorMap(*zip(*Gradients[color_set]["ticks"]))
-        elif color_set in pg.listMaps('matplotlib'):
+        elif color_set in pg.colormap.listMaps("matplotlib"):
             colors = pg.colormap.get(color_set, source='matplotlib', skipCache=True)
         else:
             # Solid color
