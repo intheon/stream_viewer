@@ -16,7 +16,7 @@ from stream_viewer.renderers.display.vispy import VispyRenderer
 
 
 VERT_SHADER = """
-#version 130
+// version 130
 
 // y coordinate of the `position`: data sample values.
 attribute float a_position;
@@ -104,7 +104,7 @@ void main() {
 MarkerMap = namedtuple('MarkerMap', ['source_id', 'timestamp'])
 
 
-class LineVis(RendererDataTimeSeries, VispyRenderer):
+class LineVis(VispyRenderer, RendererDataTimeSeries):
     import matplotlib.pyplot as plt
     color_sets = set(["random"] + list(vispy.color.get_colormaps().keys()) + plt.colormaps())
     bg_colors = ["white", "black"]
