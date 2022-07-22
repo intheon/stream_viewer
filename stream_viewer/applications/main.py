@@ -339,7 +339,7 @@ class LSLViewer(QtWidgets.QMainWindow):
                 found.widget().renderer.unfreeze()
 
     @QtCore.Slot(QtWidgets.QDockWidget)
-    def onDockDestroyed(self, obj: QtWidgets.QDockWidget, skey: str='', rkey: str=''):
+    def onDockDestroyed(self, skey: str='', rkey: str=''):
         if rkey in self._open_renderers:
             self._open_renderers = [_ for _ in self._open_renderers if _ != rkey]
 

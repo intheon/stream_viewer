@@ -39,7 +39,10 @@ def list_renderers(extra_search_dirs=[], interface_classes=[RendererFormatData, 
             module_path = entry.resolve()
             spec = importlib.util.spec_from_file_location(inspect.getmodulename(module_path), module_path)
             module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
+            try:
+                spec.loader.exec_module(module)
+            except ModuleNotFoundError:
+                continue
             for name, obj in inspect.getmembers(module, inspect.isclass):
                 if all([issubclass(obj, _) for _ in interface_classes]):
                     found_renderers.add(name)

@@ -75,7 +75,7 @@ class TimeSeriesControl(IControlPanel):
         _spinbox = self.findChild(QtWidgets.QDoubleSpinBox, name="Duration_SpinBox")
         try:
             _spinbox.valueChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         _spinbox.setValue(renderer.duration)
         _spinbox.valueChanged.connect(renderer.duration_valueChanged)
@@ -85,7 +85,7 @@ class TimeSeriesControl(IControlPanel):
             _combo = self.findChild(QtWidgets.QComboBox, name="Mode_ComboBox")
             try:
                 _combo.currentTextChanged.disconnect()
-            except TypeError:
+            except (TypeError, RuntimeError):
                 pass
             _combo.setVisible(True)
             row_ix = self.layout().getItemPosition(self.layout().indexOf(_combo))[0]
@@ -99,7 +99,7 @@ class TimeSeriesControl(IControlPanel):
         _combo = self.findChild(QtWidgets.QComboBox, name="AutoScale_ComboBox")
         try:
             _combo.currentTextChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         _combo.clear()
         _combo.addItems(renderer.autoscale_modes)
@@ -110,7 +110,7 @@ class TimeSeriesControl(IControlPanel):
         _spinbox = self.findChild(QtWidgets.QDoubleSpinBox, name="MarkerScale_SpinBox")
         try:
             _spinbox.valueChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         _spinbox.setValue(renderer.marker_scale)
         _spinbox.valueChanged.connect(renderer.marker_scale_valueChanged)
@@ -119,7 +119,7 @@ class TimeSeriesControl(IControlPanel):
         _spinbox = self.findChild(QtWidgets.QSpinBox, name="FontSize_SpinBox")
         try:
             _spinbox.valueChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         _spinbox.setValue(renderer.font_size)
         _spinbox.valueChanged.connect(renderer.font_size_valueChanged)

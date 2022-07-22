@@ -103,7 +103,7 @@ class IControlPanel(QtWidgets.QWidget):
         _tree = self.findChild(QtWidgets.QTreeWidget, name="Chans_TreeWidget")
         try:
             _tree.itemChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         if len(renderer.chan_states) > 0:
             tli = _tree.topLevelItem(0)
@@ -118,7 +118,7 @@ class IControlPanel(QtWidgets.QWidget):
         _checkbox = self.findChild(QtWidgets.QCheckBox, name="ShowNames_CheckBox")
         try:
             _checkbox.stateChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         _checkbox.setChecked(renderer.show_chan_labels)
         _checkbox.stateChanged.connect(renderer.labelvis_stateChanged)
@@ -128,7 +128,7 @@ class IControlPanel(QtWidgets.QWidget):
             _combo = self.findChild(QtWidgets.QComboBox, name="Colors_ComboBox")
             try:
                 _combo.currentTextChanged.disconnect()
-            except TypeError:
+            except (TypeError, RuntimeError):
                 pass
             _combo.setVisible(True)
             row_ix = self.layout().getItemPosition(self.layout().indexOf(_combo))[0]
@@ -144,7 +144,7 @@ class IControlPanel(QtWidgets.QWidget):
             _combo = self.findChild(QtWidgets.QComboBox, name="Background_ComboBox")
             try:
                 _combo.currentTextChanged.disconnect()
-            except TypeError:
+            except (TypeError, RuntimeError):
                 pass
             _combo.setVisible(True)
             row_ix = self.layout().getItemPosition(self.layout().indexOf(_combo))[0]
@@ -158,7 +158,7 @@ class IControlPanel(QtWidgets.QWidget):
         _spinbox = self.findChild(QtWidgets.QDoubleSpinBox, name="LL_SpinBox")
         try:
             _spinbox.valueChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         _spinbox.setValue(renderer.lower_limit)
         _spinbox.valueChanged.connect(renderer.lower_limit_valueChanged)
@@ -167,7 +167,7 @@ class IControlPanel(QtWidgets.QWidget):
         _spinbox = self.findChild(QtWidgets.QDoubleSpinBox, name="UL_SpinBox")
         try:
             _spinbox.valueChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         _spinbox.setValue(renderer.upper_limit)
         _spinbox.valueChanged.connect(renderer.upper_limit_valueChanged)
@@ -176,7 +176,7 @@ class IControlPanel(QtWidgets.QWidget):
         _spinbox = self.findChild(QtWidgets.QDoubleSpinBox, name="HP_SpinBox")
         try:
             _spinbox.valueChanged.disconnect()
-        except TypeError:
+        except (TypeError, RuntimeError):
             pass
         _spinbox.setValue(renderer.highpass_cutoff)
         _spinbox.valueChanged.connect(renderer.highpass_cutoff_valueChanged)
