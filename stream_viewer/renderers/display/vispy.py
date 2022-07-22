@@ -8,7 +8,8 @@ import inspect
 from stream_viewer.renderers.display.base import RendererBaseDisplay
 
 
-class VispyTimerRenderer(RendererBaseDisplay, app.Canvas):
+class VispyTimerRenderer(app.Canvas, RendererBaseDisplay):
+    # Note: app.Canvas does not do cooperative inheritance.
     def __init__(self, **kwargs):
         """
         Mix-in for Vispy-based renderers.
@@ -20,9 +21,10 @@ class VispyTimerRenderer(RendererBaseDisplay, app.Canvas):
         """
         # Note: app.Canvas does not do cooperative multiple inheritance (no super().__init__(**kwargs)),
         #  so we have to select for only the supported kwargs.
-        # canvas_sig = inspect.signature(app.Canvas.__init__)
-        # canvas_kwargs = {_: kwargs[_] for _ in canvas_sig.parameters.keys() if _ in kwargs}
-        super().__init__(**kwargs)  # canvas_kwargs)
+        canvas_sig = inspect.signature(app.Canvas.__init__)
+        canvas_kwargs = {_: kwargs[_] for _ in canvas_sig.parameters.keys() if _ in kwargs}
+        app.Canvas.__init__(self, **canvas_kwargs)
+        RendererBaseDisplay.__init__(self, **kwargs)
         self._timer = app.Timer(interval='auto', connect=self.on_timer, iterations=-1, start=False)
 
     def stop_timer(self):

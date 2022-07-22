@@ -17,6 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 class RendererFormatData(QtCore.QObject):
+    # We inherit QObject for signals and slots. Unfortunately, this breaks cooperative inheritance.
+    #  Therefore, any inheritance chain that includes this class in multiple inheritance must put
+    #  this (or this' descendent) last in the list of parent classes.
 
     chan_states_changed = QtCore.Signal(QtCore.QObject)
     # Use these class variables in subclass renderers to help indicate capabilities.
@@ -63,7 +66,10 @@ class RendererFormatData(QtCore.QObject):
         self._upper_limit = upper_limit
         self._highpass_cutoff = highpass_cutoff
         self._flush_on_unfreeze = flush_on_unfreeze
-        super().__init__(**kwargs)  # parent=kwargs.pop('parent', None))
+        super().__init__(**kwargs)
+        # At this point, **kwargs should only have QObject-related kwargs. If you are getting
+        #  errors related to unrecognized arguments that you know belong to one of your other
+        #  inherited classes, then please check that your base class is (transitively) inheriting this class last.
 
     def add_source(self, data_source: IDataSource):
         data_source.highpass_cutoff = self._highpass_cutoff

@@ -8,7 +8,7 @@ from pyqtgraph.widgets.PlotWidget import PlotWidget
 import numpy as np
 
 
-class BarPG(RendererMergeDataSources, PGRenderer):
+class BarPG(PGRenderer, RendererMergeDataSources):
     COMPAT_ICONTROL = ['BarControlPanel']
     gui_kwargs = dict(RendererMergeDataSources.gui_kwargs, **{'bar_width': float})
 

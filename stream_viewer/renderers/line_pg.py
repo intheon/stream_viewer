@@ -12,7 +12,7 @@ from stream_viewer.renderers.display.pyqtgraph import PGRenderer
 MarkerMap = namedtuple('MarkerMap', ['source_id', 'timestamp', 'item'])
 
 
-class LinePG(RendererDataTimeSeries, PGRenderer):
+class LinePG(PGRenderer, RendererDataTimeSeries):
 
     plot_modes = ["Sweep", "Scroll"]
     gui_kwargs = dict(RendererDataTimeSeries.gui_kwargs, **PGRenderer.gui_kwargs,

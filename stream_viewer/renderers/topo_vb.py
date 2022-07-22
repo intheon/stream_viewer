@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class TopoVB(RendererMergeDataSources, VisbrainRenderer):
+class TopoVB(VisbrainRenderer, RendererMergeDataSources):
 
     # COMPAT_ICONTROL = ['TopoControlPanel']
     gui_kwargs = dict(VisbrainRenderer.gui_kwargs, **RendererMergeDataSources.gui_kwargs,
