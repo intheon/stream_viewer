@@ -154,7 +154,7 @@ class LinePG(PGRenderer, RendererDataTimeSeries):
                     pw.setYRange(-0.5, n_vis_src - 0.5)
                     chan_ticks = list(zip(range(n_vis_src), ch_states['name']))
                     if self._auto_scale == 'none':
-                        data_ticks = [(-0.5, str(self.lower_limit)), (0.5, self.upper_limit)]
+                        data_ticks = [(-0.5, str(self.lower_limit)), (0.5, str(self.upper_limit))]
                         data_ticks += [(_ + 0.5, '') for _ in range(1, n_vis_src)]
                     else:
                         data_ticks = []
