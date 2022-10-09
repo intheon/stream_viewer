@@ -5,7 +5,6 @@ from qtpy import QtCore
 import vispy.color
 from vispy import app
 import matplotlib.pyplot as plt
-from visbrain.objects import ColorbarObj, SceneObj
 from stream_viewer.renderers.display.base import RendererBaseDisplay
 
 
@@ -38,6 +37,8 @@ class VisbrainRenderer(RendererBaseDisplay):
                 'side-fl', 'side-fr', 'side-bl', 'side-br'
             **kwargs:
         """
+        from visbrain.objects import SceneObj
+
         self._under_color = under_clip_color
         self._over_color = over_clip_color
         self._show_colorbar = show_colorbar
@@ -114,6 +115,7 @@ class VisbrainRenderer(RendererBaseDisplay):
                                     cmap_kwargs['under'], cmap_kwargs['over'])
 
         if self._show_colorbar and (self._cbar is None or self._destroy_obj):
+            from visbrain.objects import ColorbarObj
             cbar_state = dict(cbtxtsz=12, txtsz=10., width=.1, cbtxtsh=3.,
                               rect=(-.3, -2., 1., 4.))
             self._cbar = ColorbarObj(self._obj, **cbar_state)
