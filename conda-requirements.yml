@@ -5,7 +5,7 @@ channels:
 dependencies:
 - liblsl
 - numpy
-- pandas
+- pandas<2.0
 - pip
 - PyOpenGL
 - PySide2
