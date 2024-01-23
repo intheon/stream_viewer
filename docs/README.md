@@ -11,7 +11,7 @@ Additionally, StreamViewer comes with several pre-made applications, including a
 ### Installation
 
 To install the latest version from source:
-`pip install git+https://github.com/intheon/StreamViewer.git`
+`pip install git+https://github.com/intheon/stream_viewer.git`
 
 Requirements:
 
