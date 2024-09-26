@@ -31,7 +31,7 @@ To install these with pip, run:
 
 Or, if using miniconda, create an environment with:
 
-`conda env install -f conda-requirements.yml`
+`conda env create -f conda-requirements.yml`
 
 ### Running the provided applications
 
