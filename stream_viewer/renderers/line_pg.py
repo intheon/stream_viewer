@@ -123,7 +123,7 @@ class LinePG(RendererDataTimeSeries, PGRenderer):
 
             pw.showGrid(x=True, y=True, alpha=0.3)
             font = QtGui.QFont()
-            font.setPointSize(self.font_size - 2.0)
+            font.setPointSize(self.font_size - 2)
             pw.setXRange(0, self.duration)
             pw.getAxis("bottom").setTickFont(font)
             pw.getAxis("bottom").setStyle(showValues=self.ylabel_as_title)

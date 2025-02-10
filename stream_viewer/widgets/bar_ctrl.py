@@ -24,7 +24,7 @@ class BarControlPanel(IControlPanel):
         _slider = QtWidgets.QSlider(orientation=QtCore.Qt.Horizontal)
         _slider.setObjectName("Bar_Width")
         _slider.setRange(2, 10)
-        _slider.setPageStep(0.5)
+        _slider.setPageStep(1)
         self.layout().addWidget(_slider, row_ix, 1, 1, 1)
 
         self._last_row = row_ix
