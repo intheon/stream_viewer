@@ -33,13 +33,19 @@ Or, if using miniconda, create an environment with:
 
 `conda env create -f conda-requirements.yml`
 
+then activate with:
+
+`conda activate streamviewer`
+
 ### Running the provided applications
 
 Applications in the `applications` module can be run with
 
 `python -m stream_viewer.applications.{application_name}`
 
-Additionally, several of the more useful applications have entry points and can be run directly from the console:
+
+
+Additionally, if installed as a package, several of the more useful applications have entry points and can be run directly from the console:
 
 * `lsl_viewer`
 * `lsl_status`
