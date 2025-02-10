@@ -7,3 +7,4 @@ vispy
 visbrain
 pylsl
 pyqtgraph
+setuptools
