@@ -33,17 +33,28 @@ Or, if using miniconda, create an environment with:
 
 `conda env create -f conda-requirements.yml`
 
-then activate with:
+Or, using `uv` to install dependencies using the included `pyproject.toml` file:
+
+`uv sync`
+
+### Running the provided applications
+
+If using conda, first activate the environment with:
 
 `conda activate streamviewer`
 
-### Running the provided applications
+The main application can be run with: 
+
+`python stream_viewer/applications/main.py`
 
 Applications in the `applications` module can be run with
 
 `python -m stream_viewer.applications.{application_name}`
 
+Or if using `uv`, you can run with:
 
+`uv run stream_viewer/applications/main.py`
+(Or any other application in the `applications` module)
 
 Additionally, if installed as a package, several of the more useful applications have entry points and can be run directly from the console:
 

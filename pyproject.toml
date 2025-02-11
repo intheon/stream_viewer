@@ -1,0 +1,19 @@
+[project]
+name = "stream-viewer"
+version = "0.28"
+description = 'Tools to visualize data streamed with Lab Streaming Layer'
+readme = "docs/README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "packaging",
+    "pandas",
+    "pylsl==1.16.2",
+    "pyopengl",
+    "pyqtgraph",
+    "pyside2",
+    "qtpy",
+    "setuptools",
+    "visbrain",
+    "vispy",
+]
