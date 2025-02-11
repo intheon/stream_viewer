@@ -6,6 +6,7 @@ import functools
 import argparse
 from pathlib import Path
 from qtpy import QtWidgets, QtCore
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 import stream_viewer
 from stream_viewer.data import LSLDataSource
 from stream_viewer.data import LSLStreamInfoTableModel

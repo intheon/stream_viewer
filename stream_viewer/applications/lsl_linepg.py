@@ -1,7 +1,9 @@
 #  Copyright (C) 2014-2021 Syntrogi Inc dba Intheon. All rights reserved.
 
 import sys
+from pathlib import Path
 from qtpy import QtWidgets
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from stream_viewer.data import LSLDataSource
 from stream_viewer.widgets import TimeSeriesControl, ConfigAndRenderWidget
 from stream_viewer.renderers import LinePG

@@ -1,8 +1,10 @@
 #  Copyright (C) 2014-2021 Syntrogi Inc dba Intheon. All rights reserved.
 
 import sys
+from pathlib import Path
 import argparse
 from qtpy import QtWidgets
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from stream_viewer.data import LSLDataSource
 from stream_viewer.widgets import load_widget
 from stream_viewer.widgets import ConfigAndRenderWidget
