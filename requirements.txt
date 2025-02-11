@@ -5,6 +5,6 @@ qtpy
 PySide2
 vispy
 visbrain
-pylsl
+pylsl==1.16.2
 pyqtgraph
 setuptools
