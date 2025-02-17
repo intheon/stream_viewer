@@ -1,9 +1,21 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "stream-viewer"
 version = "0.28"
 description = 'Tools to visualize data streamed with Lab Streaming Layer'
+keywords = ["lsl", "lab streaming layer", "streaming", "visualization", "eeg", "neural data"]
 readme = "docs/README.md"
+authors = [
+    {name="Chadwick Boulay", email="chadwick.boulay@gmail.com"},
+    {name="Sean Mullen", email="sean.mullen@intheon.io"}
+]
+license = {text = "MIT"}
 requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3"]
 dependencies = [
     "numpy",
     "packaging",
@@ -13,7 +25,12 @@ dependencies = [
     "pyqtgraph",
     "pyside2",
     "qtpy",
-    "setuptools",
     "visbrain",
     "vispy",
 ]
+
+[project.scripts]
+lsl_viewer = "stream_viewer.applications.main:main"
+lsl_status = "stream_viewer.applications.stream_status_qml:main"
+lsl_switching_viewer = "stream_viewer.applications.lsl_switching:main"
+lsl_viewer_custom = "stream_viewer.applications.lsl_custom:main"
