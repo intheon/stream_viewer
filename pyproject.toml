@@ -21,7 +21,7 @@ dependencies = [
     "numpy>1.24.4",
     "packaging",
     "pandas",
-    "pylsl==1.16.2",
+    "pylsl>=1.16.2",
     "pyqtgraph",
     "qtpy",
     "scipy",
