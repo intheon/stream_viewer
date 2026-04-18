@@ -169,7 +169,7 @@ class LSLDataSource(IDataSource):
                     ch_state['type'] = ch_type
                 ch_loc = ch.child("location")
                 if ch_loc.name():
-                    ch_state['pos'] = [float(ch_loc.child_value(d)) or 0 for d in ["X", "Y", "Z"]]
+                    ch_state['pos'] = [float(ch_loc.child_value(d) or 0) for d in ["X", "Y", "Z"]]
                 chan_states.append(ch_state)
                 ch = ch.next_sibling()
             tle = info.desc().first_child()
