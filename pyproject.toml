@@ -31,7 +31,7 @@ dependencies = [
     "vispy",
     "pyqt5==5.15.11",
     "pyqt5-qt5==5.15.2",
-    "setuptools>=75.3.2",
+    "setuptools>=75.3.2,<82",
 ]
 
 [project.scripts]
